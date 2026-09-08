@@ -8,7 +8,8 @@ from .models import Profile
 
 
 def signup(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('dashboard')
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()

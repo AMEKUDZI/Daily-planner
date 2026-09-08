@@ -10,6 +10,7 @@ from .forms import ActivityForm
 @login_required
 def dashboard(request):
     activities = Activity.objects.filter(user=request.user).order_by('scheduled_time')
+    active_count = activities.filter(is_active=True).count()
     notifications = NotificationLog.objects.filter(
         activity__user=request.user, channel='in_app'
     ).order_by('-sent_at')[:10]
@@ -19,6 +20,7 @@ def dashboard(request):
 
     context = {
         'activities': activities,
+        'active_count': active_count,
         'notifications': notifications,
         'unread_count': unread_count,
         'today': timezone.localdate(),
@@ -68,6 +70,8 @@ def delete_activity(request, pk):
 
 @login_required
 def toggle_active(request, pk):
+    if request.method != 'POST':
+        return redirect('dashboard')
     activity = get_object_or_404(Activity, pk=pk, user=request.user)
     activity.is_active = not activity.is_active
     activity.save()
@@ -76,5 +80,7 @@ def toggle_active(request, pk):
 
 @login_required
 def mark_notifications_read(request):
+    if request.method != 'POST':
+        return redirect('dashboard')
     NotificationLog.objects.filter(activity__user=request.user, is_read=False).update(is_read=True)
     return redirect('dashboard')

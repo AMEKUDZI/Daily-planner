@@ -76,3 +76,4 @@ skipped during `migrate`, `makemigrations`, etc.
 - Add password reset (Django has this built in via `django.contrib.auth.views`)
 - Deploy to Render, Railway, or PythonAnywhere for the live demo link
 - Write unit tests for `Activity.is_due_today()` and the notification senders
+# Daily-planner

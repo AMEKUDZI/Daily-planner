@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Profile — Daily Planner{% endblock %}
+{% block content %}
+
+<div class="page-hd"><h1>Profile</h1></div>
+<p class="page-sub">Update your name, email, and phone number.</p>
+
+<div class="card">
+    <div class="profile-top">
+        <div class="profile-av">{{ user.username|slice:":2" }}</div>
+        <div class="profile-info">
+            <strong>{{ user.get_full_name|default:user.username }}</strong>
+            {{ user.email }}
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </p>
+        {% endfor %}
+        <button type="submit" class="btn" style="margin-top:6px;">Save changes</button>
+    </form>
+</div>
+
+{% endblock %}

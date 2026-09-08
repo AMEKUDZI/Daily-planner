@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} activity — Daily Planner{% endblock %}
+{% block content %}
+
+<div class="page-hd"><h1>{{ mode }} activity</h1></div>
+<p class="page-sub">Set the time, recurrence, and how you want to be reminded.</p>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <ul class="errorlist" style="margin-bottom:14px;">
+            {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+
+        <p>
+            <label for="{{ form.title.id_for_label }}">Title</label>
+            {{ form.title }}
+            {% if form.title.errors %}<ul class="errorlist">{% for e in form.title.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </p>
+        <p>
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+        </p>
+
+        <div class="form-row" style="margin-bottom:16px;">
+            <p>
+                <label for="{{ form.scheduled_time.id_for_label }}">Time</label>
+                {{ form.scheduled_time }}
+                {% if form.scheduled_time.errors %}<ul class="errorlist">{% for e in form.scheduled_time.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </p>
+            <p>
+                <label for="{{ form.start_date.id_for_label }}">Start date</label>
+                {{ form.start_date }}
+                {% if form.start_date.errors %}<ul class="errorlist">{% for e in form.start_date.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </p>
+        </div>
+
+        <p>
+            <label for="{{ form.recurrence.id_for_label }}">Recurrence</label>
+            {{ form.recurrence }}
+        </p>
+
+        <div class="section-lbl">Notify me via</div>
+        <div class="notify-grid">
+            <label class="notify-opt">
+                {{ form.notify_email }}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+                <span>Email</span>
+            </label>
+            <label class="notify-opt">
+                {{ form.notify_sms }}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+                <span>SMS</span>
+            </label>
+            <label class="notify-opt">
+                {{ form.notify_in_app }}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span>In-app</span>
+            </label>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:26px;">
+            <button type="submit" class="btn">{{ mode }} activity</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

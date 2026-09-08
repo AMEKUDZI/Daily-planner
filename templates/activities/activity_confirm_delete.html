@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Delete — Daily Planner{% endblock %}
+{% block content %}
+
+<div class="card confirm">
+    <h1>Delete "{{ activity.title }}"?</h1>
+    <p class="page-sub" style="margin-bottom:0;">This removes the activity and all its notification history. This cannot be undone.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="confirm-actions">
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

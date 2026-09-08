@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Sign in — Daily Planner{% endblock %}
+{% block auth_content %}
+
+<div class="auth-card">
+    <div class="auth-logo"><span class="auth-logo-dot"></span>Daily Planner</div>
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Sign in to see today's schedule.</p>
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <ul class="errorlist" style="margin-bottom:14px;">
+            {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+        {% for field in form %}
+        <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </p>
+        {% endfor %}
+        <button type="submit" class="btn btn-full" style="margin-top:6px;">Sign in</button>
+    </form>
+    <div class="auth-foot">
+        <span>New here? <a href="{% url 'signup' %}">Create an account</a></span>
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    </div>
+</div>
+
+{% endblock %}

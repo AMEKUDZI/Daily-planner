@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Create account — Daily Planner{% endblock %}
+{% block auth_content %}
+
+<div class="auth-card">
+    <div class="auth-logo"><span class="auth-logo-dot"></span>Daily Planner</div>
+    <h1>Create account</h1>
+    <p class="auth-sub">Set up your daily activity reminders.</p>
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <ul class="errorlist" style="margin-bottom:14px;">
+            {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+        {% for field in form %}
+        <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </p>
+        {% endfor %}
+        <button type="submit" class="btn btn-full" style="margin-top:6px;">Create account</button>
+    </form>
+    <div class="auth-foot">
+        <span>Already have an account? <a href="{% url 'login' %}">Sign in</a></span>
+    </div>
+</div>
+
+{% endblock %}

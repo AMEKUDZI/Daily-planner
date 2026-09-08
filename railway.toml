@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "python manage.py migrate && gunicorn scheduler_project.wsgi --log-file -"
+healthcheckPath = "/"
+restartPolicyType = "on_failure"

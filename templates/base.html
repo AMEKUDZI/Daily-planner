@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Daily Planner{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+{% if user.is_authenticated %}
+
+<header class="topbar">
+    <div class="tb-brand"><span class="tb-dot"></span>Daily Planner</div>
+    <button class="hamburger" id="menuOpen" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-head">
+        <div class="sb-brand" style="padding:0;"><span class="sb-dot"></span>Daily Planner</div>
+        <button class="hamburger" id="menuClose" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+    </div>
+    <nav class="sb-nav">{% include "partials/nav_links.html" %}</nav>
+    <div class="sb-sep"></div>
+    <div class="sb-footer">
+        <div class="sb-user">
+            <div class="sb-avatar">{{ user.username|slice:":2" }}</div>
+            <span class="sb-uname">{{ user.username }}</span>
+        </div>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="sb-signout">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign out
+            </button>
+        </form>
+    </div>
+</nav>
+
+<div class="shell">
+    <aside class="sidebar">
+        <div class="sb-brand"><span class="sb-dot"></span>Daily Planner</div>
+        <nav class="sb-nav">{% include "partials/nav_links.html" %}</nav>
+        <div class="sb-sep"></div>
+        <div class="sb-footer">
+            <div class="sb-user">
+                <div class="sb-avatar">{{ user.username|slice:":2" }}</div>
+                <span class="sb-uname">{{ user.username }}</span>
+            </div>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="sb-signout">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sign out
+                </button>
+            </form>
+        </div>
+    </aside>
+    <div class="main">
+        <div class="page-body">
+            {% if messages %}
+            <div class="flashes">
+                {% for m in messages %}
+                <div class="flash flash-{{ m.tags }}">{{ m }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+<div class="auth-shell">
+    {% if messages %}
+    <div class="flashes" style="position:fixed;top:20px;left:50%;transform:translateX(-50%);min-width:320px;z-index:999;">
+        {% for m in messages %}
+        <div class="flash flash-{{ m.tags }}">{{ m }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% block auth_content %}{% endblock %}
+</div>
+
+{% endif %}
+
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
